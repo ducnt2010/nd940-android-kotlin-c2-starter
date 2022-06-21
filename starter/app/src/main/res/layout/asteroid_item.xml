@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="asteroid"
+            type="com.udacity.asteroidradar.Asteroid" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +19,8 @@
             android:id="@+id/asteroid_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{asteroid.codename}"
+            android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="name"/>
@@ -21,6 +29,7 @@
             android:id="@+id/asteroid_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{asteroid.closeApproachDate}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/asteroid_name"
             tools:text="date"/>
@@ -29,6 +38,7 @@
             android:id="@+id/asteroid_hazardous_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            statusIcon="@{asteroid.potentiallyHazardous}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

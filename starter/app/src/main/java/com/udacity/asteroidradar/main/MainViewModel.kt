@@ -26,9 +26,9 @@ class MainViewModel : ViewModel() {
     val pictureOfDay: LiveData<PictureOfDay>
         get() = _pictureOfDay
 
-    private val _property = MutableLiveData<List<Asteroid>>()
-    val property: LiveData<List<Asteroid>>
-        get() = _property
+    private val _asteroidList = MutableLiveData<ArrayList<Asteroid> >()
+    val asteroidList: LiveData<ArrayList<Asteroid> >
+        get() = _asteroidList
 
     init {
         refreshPictureOfDay()
@@ -51,11 +51,11 @@ class MainViewModel : ViewModel() {
                 val obj = JSONObject(feed)
                 Log.i(TAG, "obj: End $obj")
 
-                val list = parseAsteroidsJsonResult(JSONObject(feed))
+                _asteroidList.value = parseAsteroidsJsonResult(JSONObject(feed))
 
-                for (asteroid in list) {
-                    Log.i(TAG, "Listasteroid: $asteroid")
-                }
+//                for (asteroid in list) {
+//                    Log.i(TAG, "Listasteroid: $asteroid")
+//                }
                 Log.i(TAG, "refreshPictureOfDay: End")
             } catch (e: Exception) {
 
