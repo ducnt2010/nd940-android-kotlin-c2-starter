@@ -8,14 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidsApi
+import com.udacity.asteroidradar.api.NetworkUtils
 import com.udacity.asteroidradar.api.PictureOfDayApi
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.lang.Exception
 
 class MainViewModel : ViewModel() {
@@ -26,9 +23,13 @@ class MainViewModel : ViewModel() {
     val pictureOfDay: LiveData<PictureOfDay>
         get() = _pictureOfDay
 
-    private val _asteroidList = MutableLiveData<ArrayList<Asteroid> >()
-    val asteroidList: LiveData<ArrayList<Asteroid> >
+    private val _asteroidList = MutableLiveData<ArrayList<Asteroid>>()
+    val asteroidList: LiveData<ArrayList<Asteroid>>
         get() = _asteroidList
+
+    private val _navigateToDetailAsteroid = MutableLiveData<Asteroid>()
+    val navigateToDetailAsteroid: LiveData<Asteroid>
+        get() = _navigateToDetailAsteroid
 
     init {
         refreshPictureOfDay()
@@ -51,11 +52,8 @@ class MainViewModel : ViewModel() {
                 val obj = JSONObject(feed)
                 Log.i(TAG, "obj: End $obj")
 
-                _asteroidList.value = parseAsteroidsJsonResult(JSONObject(feed))
+                _asteroidList.value = NetworkUtils.parseAsteroidsJsonResult(JSONObject(feed))
 
-//                for (asteroid in list) {
-//                    Log.i(TAG, "Listasteroid: $asteroid")
-//                }
                 Log.i(TAG, "refreshPictureOfDay: End")
             } catch (e: Exception) {
 
@@ -64,5 +62,13 @@ class MainViewModel : ViewModel() {
         }
         Log.i(TAG, "getData: X ")
 
+    }
+
+    fun displayDetailAsteroid(asteroid: Asteroid) {
+        _navigateToDetailAsteroid.value = asteroid
+    }
+
+    fun displayDetailAsteroidComplete() {
+        _navigateToDetailAsteroid.value = null
     }
 }
