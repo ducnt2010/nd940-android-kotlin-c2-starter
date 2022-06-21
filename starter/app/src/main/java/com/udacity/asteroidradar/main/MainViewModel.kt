@@ -7,8 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.PictureOfDay
-import com.udacity.asteroidradar.api.AsteroidApi
+import com.udacity.asteroidradar.api.AsteroidsApi
+import com.udacity.asteroidradar.api.PictureOfDayApi
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,10 +39,22 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             Log.i(TAG, "refreshPictureOfDay: Start")
+
+
             try {
-                val value = AsteroidApi.retrofitService.getPictureOfDay()
+                val value = PictureOfDayApi.retrofitService.getPictureOfDay()
                 if (value.mediaType == "image") {
                     _pictureOfDay.value = value
+                }
+                val feed = AsteroidsApi.retrofitService.getAsteroids()
+                Log.i(TAG, "refreshPictureOfDay: End $feed")
+                val obj = JSONObject(feed)
+                Log.i(TAG, "obj: End $obj")
+
+                val list = parseAsteroidsJsonResult(JSONObject(feed))
+
+                for (asteroid in list) {
+                    Log.i(TAG, "Listasteroid: $asteroid")
                 }
                 Log.i(TAG, "refreshPictureOfDay: End")
             } catch (e: Exception) {
