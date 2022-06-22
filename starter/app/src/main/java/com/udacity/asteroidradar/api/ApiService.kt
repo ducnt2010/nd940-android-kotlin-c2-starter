@@ -19,7 +19,7 @@ private val retrofitForPictureOfDay = Retrofit.Builder()
     .build()
 
 interface PictureOfDayApiService {
-    @GET("planetary/apod?&api_key=${Constants.API_KEY}")
+    @GET("planetary/apod?&api_key=${Constants.DEMO_API_KEY}")
     suspend fun getPictureOfDay(): PictureOfDay
 }
 
@@ -28,6 +28,7 @@ object PictureOfDayApi {
         retrofitForPictureOfDay.create(PictureOfDayApiService::class.java)
     }
 }
+
 ////////////////////////////////////////////////
 private val retrofitForAsteroids = Retrofit.Builder()
     .addConverterFactory(ScalarsConverterFactory.create())
@@ -35,7 +36,7 @@ private val retrofitForAsteroids = Retrofit.Builder()
     .build()
 
 interface AsteroidsApiService {
-    @GET("neo/rest/v1/feed?&api_key=${Constants.API_KEY}")
+    @GET("neo/rest/v1/feed?&api_key=${Constants.DEMO_API_KEY}")
     suspend fun getAsteroids(
     ): String
 }
