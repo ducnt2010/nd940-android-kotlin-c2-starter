@@ -64,6 +64,6 @@ fun bindingRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
 }
 
 @BindingAdapter("goneIfNotNull")
-fun goneIfNotNull(view: View, it: Any?) {
-    view.visibility = if (it != null) View.GONE else View.VISIBLE
+fun goneIfNotNull(view: View, it: List<Any>?) {
+    view.visibility = if (it?.isNotEmpty() == true) View.GONE else View.VISIBLE
 }
