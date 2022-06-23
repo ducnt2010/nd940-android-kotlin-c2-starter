@@ -15,11 +15,25 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "MainViewModel"
 
+enum class AsteroidListFilter {
+    WEEK,
+    TODAY,
+    SAVED
+}
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val asteroidsDatabase = AsteroidsDatabase.getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(asteroidsDatabase)
 
-    val asteroidList = asteroidsRepository.asteroids
+    private val _filter = MutableLiveData<AsteroidListFilter>(AsteroidListFilter.WEEK)
+
+    val asteroidList = Transformations.switchMap(_filter) {
+        when (it) {
+            AsteroidListFilter.WEEK -> asteroidsRepository.asteroidsByWeek
+            AsteroidListFilter.TODAY -> asteroidsRepository.asteroidsOfDay
+            else -> asteroidsRepository.savedAsteroids
+        }
+    }
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
@@ -30,6 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         get() = _navigateToDetailAsteroid
 
     init {
+//        _filter.value = AsteroidListFilter.WEEK
         viewModelScope.launch {
             refreshPictureOfDay()
             asteroidsRepository.refreshAsteroids()
@@ -46,6 +61,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun onFilterChanged(filter: AsteroidListFilter) {
+        Log.i(TAG, "onFilterChanged: $filter ")
+        _filter.value = filter
+    }
 
     fun displayDetailAsteroid(asteroid: Asteroid) {
         _navigateToDetailAsteroid.value = asteroid
