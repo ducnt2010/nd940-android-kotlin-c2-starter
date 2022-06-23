@@ -26,8 +26,8 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
                 val response = AsteroidsApi.retrofitService.getAsteroids()
                 val asteroidsList = NetworkUtils.parseAsteroidsJsonResult(JSONObject(response))
                 database.asteroidDao.insertAll(*asteroidsList.asDatabaseModel())
-            }catch (e:Exception){
-                Log.e("AsteroidsRepository", "error: $e" )
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
