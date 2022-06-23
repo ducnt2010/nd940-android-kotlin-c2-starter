@@ -48,6 +48,12 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
         }
     }
 
+    suspend fun deleteAsteroidDataBeforeToday(){
+        withContext(Dispatchers.IO) {
+            database.asteroidDao.deleteAsteroidsBeforeToday(_today)
+        }
+    }
+
     private fun getDateFormat(gapFromToday: Int): String {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, gapFromToday)
